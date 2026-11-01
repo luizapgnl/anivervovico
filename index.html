@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#141a24">
+  <title>Feliz aniversário, Vô!</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏅</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:ital,wght@1,700;1,800&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --asfalto: #141a24;
+      --asfalto-2: #1e2736;
+      --azul: #2347d6;
+      --laranja: #ff6a1a;
+      --papel: #f5f7fa;
+      --tinta: #10151f;
+      --amarelo: #ffd23a;
+
+      --titulo: "Barlow Condensed", "Arial Narrow", Impact, sans-serif;
+      --texto: "Barlow", "Segoe UI", Arial, sans-serif;
+      --mao: "Caveat", "Segoe Print", "Bradley Hand", cursive;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--asfalto);
+      color: var(--papel);
+      font-family: var(--texto);
+      font-size: 1.0625rem;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    [hidden] { display: none !important; }
+
+    :focus-visible {
+      outline: 3px solid var(--amarelo);
+      outline-offset: 3px;
+    }
+
+    /* ---------- Faixa de largada/chegada ---------- */
+    .xadrez {
+      height: 22px;
+      background: conic-gradient(var(--papel) 25%, var(--tinta) 0 50%, var(--papel) 0 75%, var(--tinta) 0) 0 0 / 44px 44px;
+    }
+
+    /* ---------- Login: número de peito ---------- */
+    .login {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: grid;
+      place-items: center;
+      padding: 24px 16px;
+      background:
+        repeating-linear-gradient(90deg, transparent 0 calc(20% - 3px), rgba(255, 255, 255, .08) calc(20% - 3px) 20%),
+        var(--asfalto);
+    }
+
+    .peito {
+      position: relative;
+      width: min(100%, 400px);
+      background: var(--papel);
+      color: var(--tinta);
+      border-radius: 10px;
+      padding: 0 28px 32px;
+      transform: rotate(-1.6deg);
+      box-shadow: 0 24px 50px rgba(0, 0, 0, .45);
+      overflow: hidden;
+    }
+
+    .peito-faixa {
+      margin: 0 -28px;
+      padding: 14px 28px;
+      background: var(--azul);
+      color: #fff;
+      font-weight: 600;
+      letter-spacing: .02em;
+    }
+
+    .furo {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--asfalto);
+      box-shadow: inset 0 2px 3px rgba(0, 0, 0, .6);
+    }
+    .furo:nth-of-type(1) { top: 10px; left: 12px; }
+    .furo:nth-of-type(2) { top: 10px; right: 12px; }
+    .furo:nth-of-type(3) { bottom: 10px; left: 12px; }
+    .furo:nth-of-type(4) { bottom: 10px; right: 12px; }
+
+    .numero {
+      margin: 18px 0 6px;
+      font-family: var(--titulo);
+      font-style: italic;
+      font-weight: 800;
+      font-size: clamp(5.5rem, 28vw, 8rem);
+      line-height: .95;
+      text-align: center;
+      color: var(--tinta);
+    }
+
+    .peito label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .peito input {
+      width: 100%;
+      font: inherit;
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-align: center;
+      padding: 12px;
+      border: 2px solid var(--tinta);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--tinta);
+    }
+
+    .erro {
+      min-height: 1.6em;
+      margin: 8px 0 0;
+      color: #b3220f;
+      font-weight: 500;
+      font-size: .95rem;
+    }
+
+    .botao {
+      display: block;
+      width: 100%;
+      margin-top: 8px;
+      padding: 14px 20px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--laranja);
+      color: #fff;
+      font-family: var(--titulo);
+      font-style: italic;
+      font-weight: 800;
+      font-size: 1.6rem;
+      cursor: pointer;
+    }
+    .botao:hover { filter: brightness(1.08); }
+    .botao:active { transform: translateY(1px); }
+
+    .peito.tremer { animation: tremer .4s; }
+    @keyframes tremer {
+      20% { transform: rotate(-1.6deg) translateX(-8px); }
+      40% { transform: rotate(-1.6deg) translateX(8px); }
+      60% { transform: rotate(-1.6deg) translateX(-5px); }
+      80% { transform: rotate(-1.6deg) translateX(5px); }
+    }
+
+    /* ---------- Fita de chegada (momento da entrada) ---------- */
+    .fita {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      pointer-events: none;
+    }
+    .fita div {
+      position: absolute;
+      top: calc(50% - 34px);
+      width: 50%;
+      height: 68px;
+      background: repeating-linear-gradient(-45deg, var(--laranja) 0 20px, var(--papel) 20px 40px);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, .35);
+      transition: transform 1s cubic-bezier(.5, 0, .9, .4) .25s;
+    }
+    .fita .esq { left: 0; }
+    .fita .dir { right: 0; }
+    .fita.abrir .esq { transform: translateX(-105%) rotate(-4deg); }
+    .fita.abrir .dir { transform: translateX(105%) rotate(4deg); }
+
+    #confete {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    /* ---------- Abertura ---------- */
+    .hero {
+      position: relative;
+      padding: 72px 20px 64px;
+      text-align: center;
+      background:
+        repeating-linear-gradient(90deg, transparent 0 calc(20% - 3px), rgba(255, 255, 255, .07) calc(20% - 3px) 20%),
+        var(--asfalto);
+    }
+
+    .hero h1 {
+      margin: 0 auto;
+      max-width: 12ch;
+      font-family: var(--titulo);
+      font-style: italic;
+      font-weight: 800;
+      font-size: clamp(3.4rem, 15vw, 7.5rem);
+      line-height: .92;
+      color: var(--laranja);
+      text-wrap: balance;
+    }
+
+    .hero p {
+      margin: 24px auto 0;
+      max-width: 30ch;
+      font-size: 1.25rem;
+      color: #dfe5ee;
+    }
+
+    /* ---------- Carta ---------- */
+    .carta-secao {
+      background: var(--azul);
+      padding: 56px 16px 72px;
+    }
+
+    .titulo-secao {
+      margin: 0 0 28px;
+      text-align: center;
+      font-family: var(--titulo);
+      font-style: italic;
+      font-weight: 800;
+      font-size: clamp(2.2rem, 9vw, 3.4rem);
+      line-height: 1;
+    }
+
+    .carta {
+      position: relative;
+      width: min(100%, 620px);
+      margin: 0 auto;
+      padding: 34px 28px 30px 40px;
+      background:
+        repeating-linear-gradient(transparent 0 35px, rgba(35, 71, 214, .18) 35px 36px),
+        #fbfcfe;
+      color: #1d2740;
+      border-radius: 4px;
+      box-shadow: 0 18px 40px rgba(6, 16, 60, .45);
+      transform: rotate(.6deg);
+      font-family: var(--mao);
+      font-weight: 500;
+      font-size: clamp(1.45rem, 4.6vw, 1.75rem);
+      line-height: 36px;
+    }
+
+    .carta::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 22px;
+      width: 2px;
+      background: rgba(255, 106, 26, .55);
+    }
+
+    .carta p { margin: 0 0 36px; }
+    .carta .assinatura { margin: 0; text-align: right; font-weight: 600; }
+
+    /* ---------- Carrossel ---------- */
+    .percurso {
+      padding: 64px 0 56px;
+      background: var(--asfalto-2);
+    }
+
+    .trilha {
+      --larg: min(78vw, 360px);
+      display: flex;
+      gap: 18px;
+      padding: 8px calc(50% - var(--larg) / 2) 20px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .trilha::-webkit-scrollbar { display: none; }
+
+    .slide {
+      flex: 0 0 var(--larg);
+      margin: 0;
+      scroll-snap-align: center;
+    }
+
+    .foto {
+      position: relative;
+      height: min(68vh, 560px);
+      overflow: hidden;
+      border-radius: 10px;
+      background: #0b0f16;
+      box-shadow: 0 14px 30px rgba(0, 0, 0, .45);
+    }
+    .foto::before {
+      content: "";
+      position: absolute;
+      inset: -20px;
+      background: var(--img) center / cover;
+      filter: blur(22px) brightness(.7);
+    }
+    .foto img {
+      position: relative;
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .slide figcaption {
+      display: flex;
+      gap: 12px;
+      align-items: baseline;
+      padding: 14px 4px 0;
+      color: #dfe5ee;
+    }
+    .km {
+      flex: none;
+      padding: 1px 10px;
+      border-radius: 4px;
+      background: var(--laranja);
+      color: #fff;
+      font-family: var(--titulo);
+      font-style: italic;
+      font-weight: 800;
+      font-size: 1.25rem;
+    }
+
+    .controles {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 14px;
+      margin-top: 8px;
+    }
+
+    .seta {
+      width: 48px;
+      height: 48px;
+      border: 2px solid var(--papel);
+      border-radius: 50%;
+      background: transparent;
+      color: var(--papel);
+      font-size: 1.4rem;
+      cursor: pointer;
+    }
+    .seta:hover { background: var(--papel); color: var(--tinta); }
+    .seta:disabled { opacity: .3; cursor: default; background: transparent; color: var(--papel); }
+
+    .marcas {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .marcas button {
+      width: 34px;
+      height: 34px;
+      border: 2px solid rgba(255, 255, 255, .45);
+      border-radius: 50%;
+      background: transparent;
+      color: var(--papel);
+      font: 600 .95rem var(--texto);
+      cursor: pointer;
+    }
+    .marcas button[aria-current="true"] {
+      border-color: var(--laranja);
+      background: var(--laranja);
+      color: #fff;
+    }
+
+    /* ---------- Chegada ---------- */
+    .chegada {
+      padding: 64px 20px 72px;
+      text-align: center;
+      background: var(--asfalto);
+    }
+    .chegada h2 {
+      margin: 0;
+      font-family: var(--titulo);
+      font-style: italic;
+      font-weight: 800;
+      font-size: clamp(2.6rem, 11vw, 4.6rem);
+      line-height: 1;
+      color: var(--amarelo);
+    }
+    .chegada p { margin: 14px 0 28px; font-size: 1.2rem; color: #dfe5ee; }
+    .chegada .botao { display: inline-block; width: auto; padding-inline: 28px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .peito.tremer { animation: none; }
+      .fita { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============ TELA DE LOGIN ============ -->
+  <main class="login" id="login">
+    <form class="peito" id="form" novalidate>
+      <span class="furo"></span><span class="furo"></span><span class="furo"></span><span class="furo"></span>
+      <div class="peito-faixa">Retirada de kit</div>
+      <p class="numero" id="numero" aria-hidden="true">02·11</p>
+
+      <label for="data">Data de nascimento do atleta</label>
+      <input id="data" name="data" type="text" inputmode="numeric" autocomplete="off"
+             placeholder="DD/MM/AAAA" maxlength="10" aria-describedby="erro" autofocus>
+      <p class="erro" id="erro" role="alert"></p>
+
+      <button class="botao" type="submit">Largar</button>
+    </form>
+  </main>
+
+  <!-- ============ SITE ============ -->
+  <div id="site" hidden>
+
+    <header class="hero">
+      <h1>Feliz aniversário, Vovicoo!</h1>
+      <p>Mais uma volta completa. O pódio é todo seu!!</p>
+    </header>
+    <div class="xadrez" aria-hidden="true"></div>
+
+    <!-- ===== CARTA: EDITE O TEXTO ABAIXO ===== -->
+    <section class="carta-secao" aria-labelledby="t-carta">
+      <h2 class="titulo-secao" id="t-carta">Uma cartinha pra você</h2>
+      <article class="carta">
+        <p>Vô,</p>
+        <p> <p>
+        Hoje é o seu dia, e eu queria te dar algo que ficasse registrado.
+        Vovico, muito obrigada por ser esse avô maravilhoso que você é.
+        Gostaria que todos tivessem a sorte de ter um vô Mauro na vida.
+    </p>
+
+    <p>
+        Obrigada pelos papazinhos, pelas fofocas, pelas corridas,
+        pelas faladinhas em inglês, pelas fotos e dicas de câmera
+        que compartilhamos juntos, pelas dicas de skincare, pelas
+        bases de unha, pelas idas à praia, pelos passeios de bicicleta,
+        pelos desenhos que assistimos juntos, pelo bom e velho
+        rock and roll e pela MPB, além das dicas de treino.
+    </p>
+
+    <p>
+        Obrigada por todos esses momentos, pelas conversas,
+        pelas risadas e, principalmente, por ser esse avô tão
+        maravilhoso, divertido e alto-astral. São essas pequenas
+        coisas que tornam nossa convivência tão especial e que
+        vou guardar com muito carinho.
+    </p>
+
+    <p>
+        Que seu novo ciclo seja repleto de saúde, paz, bênçãos
+        de Deus e muita prosperidade. Que Deus e os Orixás te
+        abençoem, te protejam e iluminem sempre seus caminhos.
+    </p>
+
+    <p>
+        Eu te amo muito! Feliz aniversário, vô Mauro! 💜
+    </p></p>
+        <p class="assinatura">Sua neta, Luluzinha</p>
+    </article>
+    </section>
+
+    <!-- ===== FOTOS: EDITE OS TEXTOS DAS LEGENDAS ===== -->
+    <section class="percurso" aria-labelledby="t-fotos">
+      <h2 class="titulo-secao" id="t-fotos">Fotos do percurso</h2>
+
+      <div class="trilha" id="trilha" tabindex="0" role="region" aria-label="Carrossel de fotos">
+        <figure class="slide">
+          <div class="foto" style="--img:url(fotos/foto1.jpg)">
+            <img src="fotos/foto1.jpg" alt="Vovico na praia, com os braços para o alto e uma ponte ao fundo">
+          </div>
+          <figcaption><span class="km">KM 1</span> Braços pro alto, como quem já cruzou a chegada</figcaption>
+        </figure>
+
+        <figure class="slide">
+          <div class="foto" style="--img:url(fotos/foto2.jpg)">
+            <img src="fotos/foto2.jpg" alt="Vovico e a Luluzinha fazendo careta, com a medalha de uma corrida no peito" loading="lazy">
+          </div>
+          <figcaption><span class="km">KM 2</span> Medalha no peito e a gente junto</figcaption>
+        </figure>
+
+        <figure class="slide">
+          <div class="foto" style="--img:url(fotos/foto3.jpg)">
+            <img src="fotos/foto3.jpg" alt="Vovico e a Luluzinha fazendo careta atrás de um barril gigante em Pinhais" loading="lazy">
+          </div>
+          <figcaption><span class="km">KM 3</span> Careta é com a gente mesmo</figcaption>
+        </figure>
+
+        <figure class="slide">
+          <div class="foto" style="--img:url(fotos/foto4.jpg)">
+            <img src="fotos/foto4.jpg" alt="Vô pescando à beira de um lago, de costas" loading="lazy">
+          </div>
+          <figcaption><span class="km">KM 4</span> Pausa pra pescar</figcaption>
+        </figure>
+
+        <figure class="slide">
+          <div class="foto" style="--img:url(fotos/foto5.jpg)">
+            <img src="fotos\foto5.jpeg" alt="Vovico passando base na unha" loading="lazy">
+          </div>
+          <figcaption><span class="km">KM 5</span> Capricho em todos os detalhes</figcaption>
+        </figure>
+      </div>
+
+      <div class="controles">
+        <button class="seta" id="anterior" type="button" aria-label="Foto anterior">←</button>
+        <div class="marcas" id="marcas"></div>
+        <button class="seta" id="proxima" type="button" aria-label="Próxima foto">→</button>
+      </div>
+    </section>
+
+    <div class="xadrez" aria-hidden="true"></div>
+    <footer class="chegada">
+      <h2>Parabéns, campeão!</h2>
+      <p>Te amo, Vô.</p>
+      <button class="botao" id="repetir" type="button">Cruzar a chegada de novo</button>
+    </footer>
+  </div>
+
+  <div class="fita" id="fita" aria-hidden="true" hidden><div class="esq"></div><div class="dir"></div></div>
+  <canvas id="confete" aria-hidden="true" hidden></canvas>
+
+  <script>
+    // =====================================================
+    //  CONFIGURAÇÃO: data de nascimento do seu vô (DD/MM/AAAA)
+    // =====================================================
+    const DATA_NASCIMENTO = "02/11/1960";
+
+    const reduzir = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const soDigitos = t => t.replace(/\D/g, "");
+
+    const login = document.getElementById("login");
+    const site = document.getElementById("site");
+    const form = document.getElementById("form");
+    const campo = document.getElementById("data");
+    const erro = document.getElementById("erro");
+
+    // O número do peito mostra dia·mês da data configurada acima
+    document.getElementById("numero").textContent =
+      DATA_NASCIMENTO.slice(0, 2) + "·" + DATA_NASCIMENTO.slice(3, 5);
+
+    // Máscara DD/MM/AAAA enquanto digita
+    campo.addEventListener("input", () => {
+      const d = soDigitos(campo.value).slice(0, 8);
+      let s = d.slice(0, 2);
+      if (d.length > 2) s += "/" + d.slice(2, 4);
+      if (d.length > 4) s += "/" + d.slice(4, 8);
+      campo.value = s;
+      erro.textContent = "";
+    });
+
+    form.addEventListener("submit", e => {
+      e.preventDefault();
+      if (soDigitos(campo.value) === soDigitos(DATA_NASCIMENTO)) {
+        try { sessionStorage.setItem("entrou", "1"); } catch (_) {}
+        abrirSite(true);
+      } else {
+        erro.textContent = "Data não confere. Digite dia, mês e ano, no formato DD/MM/AAAA.";
+        form.classList.remove("tremer");
+        void form.offsetWidth;
+        form.classList.add("tremer");
+        campo.select();
+      }
+    });
+
+    function abrirSite(comFesta) {
+      login.hidden = true;
+      site.hidden = false;
+      window.scrollTo(0, 0);
+      if (comFesta && !reduzir) festa();
+      iniciarCarrossel();
+    }
+
+    // ---------- Fita rompida + confete ----------
+    function festa() {
+      const fita = document.getElementById("fita");
+      fita.hidden = false;
+      fita.classList.remove("abrir");
+      void fita.offsetWidth;
+      fita.classList.add("abrir");
+      setTimeout(() => { fita.hidden = true; }, 1500);
+      setTimeout(confete, 500);
+    }
+
+    function confete() {
+      const cv = document.getElementById("confete");
+      const c = cv.getContext("2d");
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      cv.hidden = false;
+      cv.width = innerWidth * dpr;
+      cv.height = innerHeight * dpr;
+      c.scale(dpr, dpr);
+
+      const cores = ["#ff6a1a", "#2347d6", "#f5f7fa", "#ffd23a"];
+      const pecas = Array.from({ length: 170 }, () => ({
+        x: innerWidth / 2 + (Math.random() - .5) * 80,
+        y: innerHeight * .55,
+        vx: (Math.random() - .5) * 15,
+        vy: -Math.random() * 17 - 5,
+        g: .28 + Math.random() * .12,
+        w: 6 + Math.random() * 7,
+        h: 4 + Math.random() * 5,
+        r: Math.random() * 6,
+        vr: (Math.random() - .5) * .35,
+        cor: cores[Math.floor(Math.random() * cores.length)]
+      }));
+
+      const inicio = performance.now();
+      (function quadro(agora) {
+        const t = agora - inicio;
+        c.clearRect(0, 0, innerWidth, innerHeight);
+        for (const p of pecas) {
+          p.vy += p.g;
+          p.vx *= .992;
+          p.x += p.vx;
+          p.y += p.vy;
+          p.r += p.vr;
+          c.save();
+          c.translate(p.x, p.y);
+          c.rotate(p.r);
+          c.fillStyle = p.cor;
+          c.globalAlpha = Math.max(0, 1 - t / 4200);
+          c.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+          c.restore();
+        }
+        if (t < 4200) requestAnimationFrame(quadro);
+        else { c.clearRect(0, 0, innerWidth, innerHeight); cv.hidden = true; }
+      })(inicio);
+    }
+
+    document.getElementById("repetir").addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: reduzir ? "auto" : "smooth" });
+      if (!reduzir) setTimeout(() => { festa(); }, 500);
+    });
+
+    // ---------- Carrossel ----------
+    let carrosselPronto = false;
+    function iniciarCarrossel() {
+      if (carrosselPronto) return;
+      carrosselPronto = true;
+
+      const trilha = document.getElementById("trilha");
+      const slides = [...trilha.children];
+      const marcas = document.getElementById("marcas");
+      const ant = document.getElementById("anterior");
+      const prox = document.getElementById("proxima");
+      let atual = 0;
+
+      slides.forEach((_, i) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.textContent = i + 1;
+        b.setAttribute("aria-label", "Ir para a foto " + (i + 1));
+        b.addEventListener("click", () => ir(i));
+        marcas.appendChild(b);
+      });
+
+      const passo = () => slides.length > 1 ? slides[1].offsetLeft - slides[0].offsetLeft : trilha.clientWidth;
+
+      function ir(i) {
+        i = Math.max(0, Math.min(slides.length - 1, i));
+        trilha.scrollTo({ left: i * passo(), behavior: reduzir ? "auto" : "smooth" });
+      }
+
+      function atualizar() {
+        atual = Math.max(0, Math.min(slides.length - 1, Math.round(trilha.scrollLeft / passo())));
+        [...marcas.children].forEach((b, i) => {
+          if (i === atual) b.setAttribute("aria-current", "true");
+          else b.removeAttribute("aria-current");
+        });
+        ant.disabled = atual === 0;
+        prox.disabled = atual === slides.length - 1;
+      }
+
+      let esperando = false;
+      trilha.addEventListener("scroll", () => {
+        if (esperando) return;
+        esperando = true;
+        requestAnimationFrame(() => { atualizar(); esperando = false; });
+      });
+
+    ant.addEventListener("click", () => ir(atual - 1));
+    prox.addEventListener("click", () => ir(atual + 1));
+    trilha.addEventListener("keydown", e => {
+        if (e.key === "ArrowRight") { e.preventDefault(); ir(atual + 1); }
+        if (e.key === "ArrowLeft") { e.preventDefault(); ir(atual - 1); }
+    });
+
+    addEventListener("resize", () => ir(atual));
+    atualizar();
+    }
+
+    // Se já entrou nesta aba, abre direto (sem refazer a festa)
+    try {
+    if (sessionStorage.getItem("entrou") === "1") abrirSite(false);
+    } catch (_) {}
+    </script>
+</body>
+</html>
